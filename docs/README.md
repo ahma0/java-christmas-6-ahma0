@@ -89,11 +89,7 @@
 
 <br>
 
----
-
-## Validation
-
-### Validator
+### ChristmasException
 
 - boolean과 message를 받아 에러를 일으킵니다.
 
