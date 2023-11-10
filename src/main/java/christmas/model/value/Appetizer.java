@@ -1,6 +1,8 @@
 package christmas.model.value;
 
-public enum Appetizer {
+import java.util.stream.Stream;
+
+public enum Appetizer implements Menu {
 
     MUSHROOM_SOUP("양송이 수프", 6_000),
     TAPAS("타파스", 5_500),
@@ -14,11 +16,20 @@ public enum Appetizer {
         this.price = price;
     }
 
-    public String getAppetizerName() {
+    @Override
+    public String getMenuName() {
         return appetizerName;
     }
 
+    @Override
     public int getPrice() {
         return price;
+    }
+
+    public static Appetizer of(String appetizerName) {
+        return Stream.of(values())
+                .filter(appetizer -> appetizer.appetizerName.equals(appetizerName))
+                .findFirst()
+                .orElseThrow();
     }
 }

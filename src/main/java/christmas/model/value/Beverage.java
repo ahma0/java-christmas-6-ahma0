@@ -1,6 +1,6 @@
 package christmas.model.value;
 
-public enum Beverage {
+public enum Beverage implements Menu {
 
     ZERO_COLA("제로콜라", 3_000),
     RED_WINE("레드와인", 60_000),
@@ -14,10 +14,12 @@ public enum Beverage {
         this.price = price;
     }
 
-    public String getBeverageName() {
+    @Override
+    public String getMenuName() {
         return beverageName;
     }
 
+    @Override
     public int getPrice() {
         return price;
     }
