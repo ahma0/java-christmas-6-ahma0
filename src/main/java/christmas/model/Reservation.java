@@ -5,6 +5,7 @@ import christmas.model.value.Menu;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,6 +13,8 @@ import java.util.stream.Collectors;
 import static christmas.exception.ChristmasException.*;
 
 public class Reservation {
+
+    private static final int MAX_ORDER = 20;
 
     private final LocalDate reservationDate;
     private Map<Menu, Integer> orderDetails;
@@ -50,13 +53,17 @@ public class Reservation {
 
     private void validateReservationDate(String day) {
         causeIllegalArgumentExceptionForDate(
-                isBlankOrEmpty(day) || ! isDigit(day) || isDateExceeded(day)
+                isBlankOrEmpty(day) || !isDigit(day) || isDateExceeded(day)
         );
     }
 
     private void validateReservationOrderDetails(String orders) {
         causeIllegalStateExceptionForOrderDetails(isBlankOrEmptyByOrderDetails(orders));
-        causeIllegalArgumentExceptionForOrderDetails(isDuplicated(orders));
+        causeIllegalArgumentExceptionForOrderDetails(
+                isDuplicated(orders)
+                        || isAllBeverage(orders)
+                        || hasOrderExceededMaximumQuantity(orders)
+        );
         validateOrderDetails(orders);
     }
 
@@ -68,11 +75,11 @@ public class Reservation {
 
     private boolean isBlankOrEmptyByOrderDetails(String orders) {
         return Arrays.stream(orders.split(",|-"))
-                .anyMatch(order -> order.isBlank() || order.isEmpty());
+                .anyMatch(this::isBlankOrEmpty);
     }
 
-    private boolean isBlankOrEmpty(String day) {
-        return day.isEmpty() || day.isBlank();
+    private boolean isBlankOrEmpty(String str) {
+        return str.isEmpty() || str.isBlank();
     }
 
     private boolean isDuplicated(String orders) {
@@ -80,7 +87,23 @@ public class Reservation {
                 .map(pair -> pair.split("-")[0])
                 .toList();
 
-        return collect.stream().distinct().count() != collect.size();
+        return collect.size() != new HashSet<>(collect).size();
+    }
+
+    private boolean hasOrderExceededMaximumQuantity(String orders) {
+        return Arrays.stream(orders.replaceAll(" ", "").split(","))
+                .map(pair -> pair.split("-")[1])
+                .mapToInt(Integer::parseInt)
+                .sum() > MAX_ORDER;
+    }
+
+    private boolean isAllBeverage(String orders) {
+        List<Menu> menuNames = Arrays.stream(orders.replaceAll(" ", "").split(","))
+                .map(pair -> pair.split("-")[0])
+                .map(CourseMeal::findMenuItemByName)
+                .toList();
+
+        return new HashSet<>(CourseMeal.BEVERAGE.getMenus()).containsAll(menuNames);
     }
 
     private boolean isZero(String str) {
