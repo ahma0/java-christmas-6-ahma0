@@ -2,6 +2,7 @@ package christmas.model.value;
 
 import christmas.exception.ExceptionMessage;
 
+import java.util.Arrays;
 import java.util.List;
 
 public enum CourseMeal {
@@ -21,11 +22,12 @@ public enum CourseMeal {
         return menus;
     }
 
-    public Menu findMenuItemByName(String itemName) {
-        return menus.stream()
+    public static Menu findMenuItemByName(String itemName) {
+        return Arrays.stream(values())
+                .flatMap(courseMeal -> courseMeal.getMenus().stream())
                 .filter(menuItem -> menuItem.getMenuName().equals(itemName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOI_IN_MENU));
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOT_VALID_ORDER));
     }
 
 }
