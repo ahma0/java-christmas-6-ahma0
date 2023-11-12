@@ -26,10 +26,10 @@ public class DecemberEvent extends Event {
 
     public Optional<Benefit> getWeekDiscount(OrderDetails orderDetails) {
         if (isWeekend()) {
-            return Optional.of(new Benefit("주말 할인", orderDetails.getMainDishCount() * MENU_DISCOUNT));
+            return Optional.of(new Benefit("주말 할인", (orderDetails.getMainDishCount() * MENU_DISCOUNT)));
         }
 
-        return Optional.of(new Benefit("평일 할인", orderDetails.getDessertCount() * MENU_DISCOUNT));
+        return Optional.of(new Benefit("평일 할인", (orderDetails.getDessertCount() * MENU_DISCOUNT)));
     }
 
     private boolean isPossibleGetSpecialDiscount() {

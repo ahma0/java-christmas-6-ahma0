@@ -42,7 +42,7 @@ public class Discount {
 
     public List<String> getBenefitListForFormat() {
         return generateBenefitList().stream()
-                .map(benefit -> String.format("%s: -%,d\n", benefit.getBenefitName(), benefit.getBenefitPrice()))
+                .map(benefit -> String.format("%s: -%,d원", benefit.getBenefitName(), benefit.getBenefitPrice()))
                 .collect(Collectors.toList());
     }
 
@@ -68,6 +68,5 @@ public class Discount {
         }
         return Optional.empty();
     }
-
 
 }

@@ -39,15 +39,17 @@ public class OrderDetails {
     }
 
     public int getMainDishCount() {
-        return (int) orderDetails.entrySet().stream()
+        return orderDetails.entrySet().stream()
                 .filter(pair -> MainDish.contain(pair.getKey()))
-                .count();
+                .mapToInt(Map.Entry::getValue)
+                .sum();
     }
 
     public int getDessertCount() {
-        return (int) orderDetails.entrySet().stream()
+        return orderDetails.entrySet().stream()
                 .filter(pair -> Dessert.contain(pair.getKey()))
-                .count();
+                .mapToInt(Map.Entry::getValue)
+                .sum();
     }
 
     private static Map<Menu, Integer> parseOrderDetails(String orders) {
