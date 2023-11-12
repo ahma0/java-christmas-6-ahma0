@@ -25,6 +25,10 @@ public class Reservation {
         return reservationDate;
     }
 
+    public OrderDetails getOrderDetails() {
+        return orderDetails;
+    }
+
     public List<String> getOrderDetailsWithFormat() {
         return orderDetails.getOrderDetailsWithFormat();
     }

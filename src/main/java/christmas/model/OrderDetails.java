@@ -1,6 +1,9 @@
 package christmas.model;
 
+import christmas.model.value.Beverage;
 import christmas.model.value.CourseMeal;
+import christmas.model.value.Dessert;
+import christmas.model.value.MainDish;
 import christmas.model.value.Menu;
 
 import java.util.Arrays;
@@ -33,6 +36,18 @@ public class OrderDetails {
         return orderDetails.entrySet().stream()
                 .mapToInt(entry -> entry.getKey().getPrice() * entry.getValue())
                 .sum();
+    }
+
+    public int getMainDishCount() {
+        return (int) orderDetails.entrySet().stream()
+                .filter(pair -> MainDish.contain(pair.getKey()))
+                .count();
+    }
+
+    public int getDessertCount() {
+        return (int) orderDetails.entrySet().stream()
+                .filter(pair -> Dessert.contain(pair.getKey()))
+                .count();
     }
 
     private static Map<Menu, Integer> parseOrderDetails(String orders) {
@@ -90,7 +105,7 @@ public class OrderDetails {
                 .map(CourseMeal::findMenuItemByName)
                 .toList();
 
-        return new HashSet<>(CourseMeal.BEVERAGE.getMenus()).containsAll(menuNames);
+        return Beverage.containAll(menuNames);
     }
 
     private boolean isZero(String str) {

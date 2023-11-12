@@ -1,5 +1,8 @@
 package christmas.model.value;
 
+import java.util.HashSet;
+import java.util.List;
+
 public enum Dessert implements Menu {
 
     CHOCOLATE_CAKE("초코케이크", 15_000),
@@ -21,5 +24,9 @@ public enum Dessert implements Menu {
     @Override
     public int getPrice() {
         return price;
+    }
+
+    public static boolean contain(Menu menu) {
+        return List.of(values()).contains(menu);
     }
 }

@@ -1,5 +1,8 @@
 package christmas.model.value;
 
+import java.util.HashSet;
+import java.util.List;
+
 public enum MainDish implements Menu {
 
     T_BONE_STEAK("티본스테이크", 55_000),
@@ -23,5 +26,9 @@ public enum MainDish implements Menu {
     @Override
     public int getPrice() {
         return price;
+    }
+
+    public static boolean contain(Menu menu) {
+        return List.of(values()).contains(menu);
     }
 }
