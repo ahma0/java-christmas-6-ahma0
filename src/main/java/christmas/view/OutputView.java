@@ -19,6 +19,7 @@ public class OutputView {
         printPreviewBenefits();
         printOrderSheet();
         printTotalPrice(discount);
+        printGiveaway(discount);
     }
 
     private void printPreviewBenefits() {
@@ -34,6 +35,11 @@ public class OutputView {
     private void printTotalPrice(Discount discount) {
         System.out.println("\n<할인 전 총주문 금액>");
         System.out.printf("%,d원", discount.getTotalPrice());
+    }
+
+    private void printGiveaway(Discount discount) {
+        System.out.println("\n<증정 메뉴>");
+        System.out.println(discount.getGiveaway());
     }
 
 }
