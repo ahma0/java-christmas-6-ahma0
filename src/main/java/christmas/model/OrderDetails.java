@@ -29,6 +29,12 @@ public class OrderDetails {
                 .collect(Collectors.toList());
     }
 
+    public int calculateTotalPrice() {
+        return orderDetails.entrySet().stream()
+                .mapToInt(entry -> entry.getKey().getPrice() * entry.getValue())
+                .sum();
+    }
+
     private static Map<Menu, Integer> parseOrderDetails(String orders) {
         return Arrays.stream(orders.split(","))
                 .map(pair -> pair.split("-"))

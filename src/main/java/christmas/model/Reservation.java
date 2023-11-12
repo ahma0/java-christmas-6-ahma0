@@ -37,6 +37,10 @@ public class Reservation {
         orderDetails = new OrderDetails(orders);
     }
 
+    public int getTotalPrice() {
+        return orderDetails.calculateTotalPrice();
+    }
+
     private void validateReservationDate(String day) {
         causeIllegalArgumentExceptionForDate(
                 isBlankOrEmpty(day) || !isDigit(day) || isDateExceeded(day)
