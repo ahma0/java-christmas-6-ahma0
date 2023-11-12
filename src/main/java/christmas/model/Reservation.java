@@ -33,8 +33,10 @@ public class Reservation {
         return reservationDate;
     }
 
-    public Map<Menu, Integer> getOrderDetails() {
-        return orderDetails;
+    public List<String> getOrderDetailsWithFormat() {
+        return orderDetails.entrySet().stream()
+                .map(entry -> String.format("%s %d개", entry.getKey().getMenuName(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 
     public void setOrderDetails(String orders) {
@@ -70,7 +72,7 @@ public class Reservation {
     private void validateOrderDetails(String orders) {
         Arrays.stream(orders.replaceAll(" ", "").split(","))
                 .map(pair -> pair.split("-"))
-                .forEach(pair -> causeIllegalArgumentExceptionForOrderDetails(isDigit(pair[1]) || isZero(pair[1])));
+                .forEach(pair -> causeIllegalArgumentExceptionForOrderDetails(!isDigit(pair[1]) || isZero(pair[1])));
     }
 
     private boolean isBlankOrEmptyByOrderDetails(String orders) {
@@ -118,6 +120,4 @@ public class Reservation {
         int date = Integer.parseInt(day);
         return date <= 0 || date > 31;
     }
-
-
 }
