@@ -1,13 +1,11 @@
 package christmas.model;
 
-import christmas.model.dto.Benefit;
+import christmas.model.dto.BenefitList;
 import christmas.model.value.Beverage;
 import christmas.model.value.Menu;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Discount {
 
@@ -15,18 +13,18 @@ public class Discount {
     private static final int GIVEAWAY_CRITERIA = 120_000;
     private static final String NOT_EXIST = "없음";
 
-    private final ChristmasEvent christmasEvent;
-    private final DecemberEvent decemberEvent;
     private final int totalPrice;
-    private final OrderDetails orderDetails;
 
-    private int benefit;
+    private final BenefitList benefitList;
 
     public Discount(Reservation reservation) {
-        this.christmasEvent = new ChristmasEvent(reservation.getReservationDate());
-        this.decemberEvent = new DecemberEvent(reservation.getReservationDate());
         this.totalPrice = reservation.getTotalPrice();
-        this.orderDetails = reservation.getOrderDetails();
+        LocalDate reservationDate = reservation.getReservationDate();
+        benefitList = new BenefitList(
+                new ChristmasEvent(reservationDate),
+                new DecemberEvent(reservationDate, reservation.getOrderDetails()),
+                totalPrice
+        );
     }
 
     public int getTotalPrice() {
@@ -41,32 +39,34 @@ public class Discount {
     }
 
     public List<String> getBenefitListForFormat() {
-        return generateBenefitList().stream()
-                .map(benefit -> String.format("%s: -%,d원", benefit.getBenefitName(), benefit.getBenefitPrice()))
-                .collect(Collectors.toList());
+        List<String> benefitDetails = getBenefitListWithFormat();
+
+        if (benefitDetails.isEmpty()) {
+            return List.of(NOT_EXIST);
+        }
+
+        return benefitDetails;
     }
 
-    private List<Benefit> generateBenefitList() {
-        return Stream.of(
-                        christmasEvent.calculateDDayDiscountAndGet(),
-                        decemberEvent.getWeekDiscount(orderDetails),
-                        decemberEvent.getSpecialDate(),
-                        getGiveawayWithBenefitDto()
-                )
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+    public String getTotalBenefitAmount() {
+        int totalBenefitPrice = benefitList.getTotalBenefitPrice();
+
+        if (isBenefitPriceZero(totalBenefitPrice)) {
+            return "0원";
+        }
+        return String.format("-%,d원", totalBenefitPrice);
+    }
+
+    private boolean isBenefitPriceZero(int totalBenefitPrice) {
+        return totalBenefitPrice == 0;
+    }
+
+    private List<String> getBenefitListWithFormat() {
+        return benefitList.getBenefitListWithFormat();
     }
 
     private boolean didTotalPriceMeetCriteria() {
         return totalPrice >= GIVEAWAY_CRITERIA;
-    }
-
-    private Optional<Benefit> getGiveawayWithBenefitDto() {
-        if (didTotalPriceMeetCriteria()) {
-            return Optional.of(new Benefit("증정 이벤트", GIVEAWAY.getPrice()));
-        }
-        return Optional.empty();
     }
 
 }

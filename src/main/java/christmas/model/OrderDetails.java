@@ -22,7 +22,7 @@ public class OrderDetails {
     private final Map<Menu, Integer> orderDetails;
 
     public OrderDetails(String orders) {
-        validateReservationOrderDetails(orders);
+        validateReservationOrderDetails(orders.replaceAll(" ", ""));
         this.orderDetails = parseOrderDetails(orders);
     }
 
@@ -53,7 +53,7 @@ public class OrderDetails {
     }
 
     private static Map<Menu, Integer> parseOrderDetails(String orders) {
-        return Arrays.stream(orders.split(","))
+        return Arrays.stream(orders.replaceAll(" ", "").split(","))
                 .map(pair -> pair.split("-"))
                 .collect(Collectors.toMap(
                         keyValue -> CourseMeal.findMenuItemByName(keyValue[0]),
