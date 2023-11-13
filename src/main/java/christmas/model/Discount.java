@@ -1,11 +1,14 @@
 package christmas.model;
 
+import christmas.model.dto.Benefit;
 import christmas.model.dto.BenefitList;
 import christmas.model.value.Beverage;
 import christmas.model.value.Menu;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Discount {
 
@@ -33,7 +36,7 @@ public class Discount {
 
     public String getGiveaway() {
         if (didTotalPriceMeetCriteria()) {
-            return String.format("%s %d개", GIVEAWAY.getMenuName(), 1);
+            return String.format("%s %,d개", GIVEAWAY.getMenuName(), 1);
         }
         return NOT_EXIST;
     }
@@ -54,7 +57,15 @@ public class Discount {
         if (isBenefitPriceZero(totalBenefitPrice)) {
             return "0원";
         }
-        return String.format("-%,d원", totalBenefitPrice);
+
+        if (didTotalPriceMeetCriteria()) {
+            return getPriceWithFormat(totalBenefitPrice + GIVEAWAY.getPrice());
+        }
+        return getPriceWithFormat(totalBenefitPrice);
+    }
+
+    private String getPriceWithFormat(int price) {
+        return String.format("-%,d원", price);
     }
 
     private boolean isBenefitPriceZero(int totalBenefitPrice) {
@@ -62,11 +73,23 @@ public class Discount {
     }
 
     private List<String> getBenefitListWithFormat() {
-        return benefitList.getBenefitListWithFormat();
+        List<String> benefitListWithFormat = new ArrayList<>(benefitList.getBenefitListWithFormat());
+
+        getGiveawayWithBenefitDto()
+                .ifPresent(benefit -> benefitListWithFormat.add(benefit.getBenefitWithFormat()));
+
+        return benefitListWithFormat;
     }
 
     private boolean didTotalPriceMeetCriteria() {
         return totalPrice >= GIVEAWAY_CRITERIA;
+    }
+
+    private Optional<Benefit> getGiveawayWithBenefitDto() {
+        if (didTotalPriceMeetCriteria()) {
+            return Optional.of(new Benefit("증정 이벤트", GIVEAWAY.getPrice()));
+        }
+        return Optional.empty();
     }
 
 }

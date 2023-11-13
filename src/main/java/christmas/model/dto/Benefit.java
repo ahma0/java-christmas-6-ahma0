@@ -17,4 +17,8 @@ public class Benefit {
     public int getBenefitPrice() {
         return benefitPrice;
     }
+
+    public String getBenefitWithFormat() {
+        return String.format("%s: -%,d원", benefitName, benefitPrice);
+    }
 }

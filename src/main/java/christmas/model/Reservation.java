@@ -34,7 +34,7 @@ public class Reservation {
     }
 
     public String getReservationDateWithFormat() {
-        return reservationDate.format(DateTimeFormatter.ofPattern("MM월 dd일"));
+        return reservationDate.format(DateTimeFormatter.ofPattern("MM월 d일"));
     }
 
     public void setOrderDetails(String orders) {
