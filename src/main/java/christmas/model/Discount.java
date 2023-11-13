@@ -1,7 +1,5 @@
 package christmas.model;
 
-import christmas.model.dto.Benefit;
-import christmas.model.dto.BenefitList;
 import christmas.model.value.Beverage;
 import christmas.model.value.Menu;
 

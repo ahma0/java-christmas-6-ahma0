@@ -1,7 +1,4 @@
-package christmas.model.dto;
-
-import christmas.model.ChristmasEvent;
-import christmas.model.DecemberEvent;
+package christmas.model;
 
 import java.util.List;
 import java.util.Optional;

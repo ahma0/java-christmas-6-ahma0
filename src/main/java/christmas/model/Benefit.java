@@ -1,9 +1,9 @@
-package christmas.model.dto;
+package christmas.model;
 
 public class Benefit {
 
-    private String benefitName;
-    private int benefitPrice;
+    private final String benefitName;
+    private final int benefitPrice;
 
     public Benefit(String benefitName, int benefitPrice) {
         this.benefitName = benefitName;
