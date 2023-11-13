@@ -63,18 +63,18 @@ public class OrderDetails {
 
     private void validateReservationOrderDetails(String orders) {
         causeIllegalStateExceptionForOrderDetails(isBlankOrEmptyByOrderDetails(orders));
+        validateOrderDetails(orders);
         causeIllegalArgumentExceptionForOrderDetails(
                 isDuplicated(orders)
                         || isAllBeverage(orders)
                         || hasOrderExceededMaximumQuantity(orders)
         );
-        validateOrderDetails(orders);
     }
 
     private void validateOrderDetails(String orders) {
         Arrays.stream(orders.replaceAll(" ", "").split(","))
-                .map(pair -> pair.split("-"))
-                .forEach(pair -> causeIllegalArgumentExceptionForOrderDetails(!isDigit(pair[1]) || isZero(pair[1])));
+                .map(pair -> pair.split("-")[1])
+                .forEach(number -> causeIllegalArgumentExceptionForOrderDetails(!isDigit(number) || isZero(number)));
     }
 
     private boolean isBlankOrEmptyByOrderDetails(String orders) {
