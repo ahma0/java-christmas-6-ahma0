@@ -15,6 +15,7 @@ public class OutputView {
         printTotalPrice(discount);
         printGiveaway(discount);
         printBenefitList(discount);
+        printTotalBenefitAmount(discount);
     }
 
     private void printPreviewBenefits(Reservation reservation) {
@@ -40,6 +41,11 @@ public class OutputView {
     private void printBenefitList(Discount discount) {
         System.out.println("\n<혜택 내역>");
         discount.getBenefitListForFormat().forEach(System.out::println);
+    }
+
+    private void printTotalBenefitAmount(Discount discount) {
+        System.out.println("\n<총혜택 금액>");
+        System.out.println(discount.getTotalBenefitAmount());
     }
 
 }
