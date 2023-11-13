@@ -32,6 +32,10 @@ public class Discount {
         return totalPrice;
     }
 
+    public String getTotalPriceWithBenefit() {
+        return String.format("%,d원", totalPrice - benefitList.getTotalBenefitPrice());
+    }
+
     public String getGiveaway() {
         if (didTotalPriceMeetCriteria()) {
             return String.format("%s %,d개", GIVEAWAY.getMenuName(), 1);

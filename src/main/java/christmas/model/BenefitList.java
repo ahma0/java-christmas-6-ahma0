@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 public class BenefitList {
 
     private final List<Benefit> benefits;
-
     private final int totalBenefitPrice;
 
     public BenefitList(ChristmasEvent christmasEvent, DecemberEvent decemberEvent, int totalPrice) {
