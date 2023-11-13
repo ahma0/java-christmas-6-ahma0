@@ -1,5 +1,8 @@
 package christmas.model.value;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public enum EventBadge {
 
     STAR("별", 5_000),
@@ -20,5 +23,12 @@ public enum EventBadge {
 
     public int getPurchaseAmount() {
         return purchaseAmount;
+    }
+
+    public static EventBadge getEventBadge(int benefitPrice) {
+        return Arrays.stream(values())
+                .filter(eventBadge -> benefitPrice >= eventBadge.purchaseAmount)
+                .max(Comparator.comparing(EventBadge::getPurchaseAmount))
+                .orElse(null);
     }
 }

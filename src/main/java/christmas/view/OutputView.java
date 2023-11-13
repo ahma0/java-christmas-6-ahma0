@@ -2,8 +2,11 @@ package christmas.view;
 
 import christmas.model.Discount;
 import christmas.model.Reservation;
+import christmas.model.value.EventBadge;
 
 public class OutputView {
+
+    private static final String NOT_EXIST = "없음";
 
     public void printGreetingMessage() {
         System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
@@ -17,6 +20,7 @@ public class OutputView {
         printBenefitList(discount);
         printTotalBenefitAmount(discount);
         printTotalPriceWithBenefit(discount);
+        printEventBadge(discount);
     }
 
     private void printPreviewBenefits(Reservation reservation) {
@@ -46,12 +50,33 @@ public class OutputView {
 
     private void printTotalBenefitAmount(Discount discount) {
         System.out.println("\n<총혜택 금액>");
-        System.out.println(discount.getTotalBenefitAmount());
+        System.out.println(getPriceWithFormat(discount.getTotalBenefitAmount()));
+    }
+
+    private String getPriceWithFormat(int price) {
+
+        if (price == 0) {
+            return "0원";
+        }
+
+        return String.format("-%,d원", price);
     }
 
     private void printTotalPriceWithBenefit(Discount discount) {
         System.out.println("\n<할인 후 예상 결제 금액>");
         System.out.println(discount.getTotalPriceWithBenefit());
+    }
+
+    private void printEventBadge(Discount discount) {
+        System.out.println("\n<12월 이벤트 배지>");
+        EventBadge eventBadge = EventBadge.getEventBadge(discount.getTotalBenefitAmount());
+
+        if (eventBadge != null) {
+            System.out.println(eventBadge.getBadgeName());
+            return;
+        }
+
+        System.out.println(NOT_EXIST);
     }
 
 }

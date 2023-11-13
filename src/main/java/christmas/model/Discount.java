@@ -53,17 +53,18 @@ public class Discount {
         return benefitDetails;
     }
 
-    public String getTotalBenefitAmount() {
+    public int getTotalBenefitAmount() {
         int totalBenefitPrice = benefitList.getTotalBenefitPrice();
 
         if (isBenefitPriceZero(totalBenefitPrice)) {
-            return "0원";
+            return 0;
         }
 
         if (didTotalPriceMeetCriteria()) {
-            return getPriceWithFormat(totalBenefitPrice + GIVEAWAY.getPrice());
+            return totalBenefitPrice + GIVEAWAY.getPrice();
         }
-        return getPriceWithFormat(totalBenefitPrice);
+
+        return totalBenefitPrice;
     }
 
     private String getPriceWithFormat(int price) {
