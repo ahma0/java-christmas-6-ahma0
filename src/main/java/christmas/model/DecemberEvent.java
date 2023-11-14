@@ -32,15 +32,16 @@ public class DecemberEvent extends Event {
     }
 
     public Optional<Benefit> getWeekDiscount() {
-        if (isWeekend()) {
-            return Optional.of(new Benefit("주말 할인", (orderDetails.getMainDishCount() * MENU_DISCOUNT)));
-        }
+        int benefitPrice = calculateBenefitPrice();
 
-        return Optional.of(new Benefit("평일 할인", (orderDetails.getDessertCount() * MENU_DISCOUNT)));
+        if(!isBenefitPriceZero(benefitPrice)) {
+            return Optional.of(new Benefit(getWeek(), benefitPrice));
+        }
+        return Optional.empty();
     }
 
     public Optional<Menu> getGiveaway() {
-        if(didTotalPriceMeetCriteria()) {
+        if (didTotalPriceMeetCriteria()) {
             Optional.of(GIVEAWAY);
         }
 
@@ -54,8 +55,26 @@ public class DecemberEvent extends Event {
         return Optional.empty();
     }
 
+    private String getWeek() {
+        if (isWeekend()) {
+            return "주말 할인";
+        }
+        return "평일 할인";
+    }
+
+    private int calculateBenefitPrice() {
+        if(isWeekend()) {
+            return orderDetails.getMainDishCount() * MENU_DISCOUNT;
+        }
+        return orderDetails.getDessertCount() * MENU_DISCOUNT;
+    }
+
     private boolean isPossibleGetSpecialDiscount() {
         return reservationDate.getDayOfWeek().getValue() == 7 || reservationDate.getDayOfMonth() == 25;
+    }
+
+    private boolean isBenefitPriceZero(int benefitPrice) {
+        return benefitPrice == 0;
     }
 
     public boolean didTotalPriceMeetCriteria() {

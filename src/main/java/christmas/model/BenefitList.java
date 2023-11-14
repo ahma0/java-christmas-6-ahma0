@@ -28,6 +28,10 @@ public class BenefitList {
         this.totalBenefitPrice = calculateTotalBenefitAmount();
     }
 
+    public List<Benefit> getBenefits() {
+        return benefits;
+    }
+
     public Optional<Menu> getGiveaway() {
         if (decemberEvent != null) {
             return decemberEvent.getGiveaway();
@@ -37,7 +41,6 @@ public class BenefitList {
 
     public List<String> getBenefitListWithFormat() {
         return benefits.stream()
-                .filter(this::isNotBenefitPriceZero)
                 .map(Benefit::getBenefitWithFormat)
                 .toList();
     }
@@ -70,10 +73,6 @@ public class BenefitList {
         return benefits.stream()
                 .mapToInt(Benefit::getBenefitPrice)
                 .sum();
-    }
-
-    private boolean isNotBenefitPriceZero(Benefit benefit) {
-        return benefit.getBenefitPrice() != 0;
     }
 
 }
