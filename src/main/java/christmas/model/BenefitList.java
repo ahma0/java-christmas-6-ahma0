@@ -21,7 +21,7 @@ public class BenefitList {
     }
 
     public List<String> getBenefitListWithFormat() {
-        if(!isTotalPriceLessThen()) {
+        if(isTotalPriceLessThen()) {
             return new ArrayList<>();
         }
 
