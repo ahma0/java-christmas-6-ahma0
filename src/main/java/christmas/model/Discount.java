@@ -56,10 +56,6 @@ public class Discount {
     public int getTotalBenefitAmount() {
         int totalBenefitPrice = benefitList.getTotalBenefitPrice();
 
-        if (isBenefitPriceZero(totalBenefitPrice)) {
-            return 0;
-        }
-
         if (didTotalPriceMeetCriteria()) {
             return totalBenefitPrice + GIVEAWAY.getPrice();
         }
@@ -69,10 +65,6 @@ public class Discount {
 
     private String getPriceWithFormat(int price) {
         return String.format("-%,d원", price);
-    }
-
-    private boolean isBenefitPriceZero(int totalBenefitPrice) {
-        return totalBenefitPrice == 0;
     }
 
     private List<String> getBenefitListWithFormat() {
