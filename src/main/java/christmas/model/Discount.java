@@ -12,6 +12,7 @@ public class Discount {
 
     private static final Menu GIVEAWAY = Beverage.CHAMPAGNE;
     private static final int GIVEAWAY_CRITERIA = 120_000;
+    private final static int BENEFIT_CRITERIA = 10_000;
     private static final String NOT_EXIST = "없음";
 
     private final int totalPrice;
@@ -20,12 +21,7 @@ public class Discount {
 
     public Discount(Reservation reservation) {
         this.totalPrice = reservation.getTotalPrice();
-        LocalDate reservationDate = reservation.getReservationDate();
-        benefitList = new BenefitList(
-                new ChristmasEvent(reservationDate),
-                new DecemberEvent(reservationDate, reservation.getOrderDetails()),
-                totalPrice
-        );
+        this.benefitList = generateBenefitList(reservation);
     }
 
     public int getTotalPrice() {
@@ -63,8 +59,21 @@ public class Discount {
         return totalBenefitPrice;
     }
 
-    private String getPriceWithFormat(int price) {
-        return String.format("-%,d원", price);
+    private BenefitList generateBenefitList(Reservation reservation) {
+        LocalDate reservationDate = reservation.getReservationDate();
+
+        if (isTotalPriceLessThen()) {
+            return new BenefitList();
+        }
+
+        return new BenefitList(
+                new ChristmasEvent(reservationDate),
+                new DecemberEvent(reservationDate, reservation.getOrderDetails())
+        );
+    }
+
+    private boolean isTotalPriceLessThen() {
+        return totalPrice < BENEFIT_CRITERIA;
     }
 
     private List<String> getBenefitListWithFormat() {
