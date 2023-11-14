@@ -28,6 +28,6 @@ public enum Beverage implements Menu {
     }
 
     public static boolean containAll(List<Menu> menuNames) {
-        return new HashSet<>(menuNames).containsAll(List.of(values()));
+        return new HashSet<>(List.of(values())).containsAll(menuNames);
     }
 }
