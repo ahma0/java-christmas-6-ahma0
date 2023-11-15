@@ -65,6 +65,7 @@ public class OrderDetails {
         causeIllegalStateExceptionForOrderDetails(
                 isBlankOrEmptyByOrderDetails(orders)
                         || !isContainHyphen(orders)
+                        || isHyphenEmpty(orders)
         );
         validateOrderDetails(orders);
         causeIllegalArgumentExceptionForOrderDetails(
@@ -78,6 +79,11 @@ public class OrderDetails {
         Arrays.stream(orders.replaceAll(" ", "").split(","))
                 .map(pair -> pair.split("-"))
                 .forEach(pair -> causeIllegalArgumentExceptionForOrderDetails(isSizeTwo(pair.length) && (!isDigit(pair[1]) || isZero(pair[1]))));
+    }
+
+    private boolean isHyphenEmpty(String orders) {
+        String order = orders.replaceAll("-", "");
+        return order.isEmpty() || order.isBlank();
     }
 
     private boolean isSizeTwo(int length) {
