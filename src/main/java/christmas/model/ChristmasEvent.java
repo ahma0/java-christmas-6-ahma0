@@ -16,6 +16,10 @@ public class ChristmasEvent extends Event {
 
     public Optional<Benefit> calculateDDayDiscountAndGet() {
         if (isBetweenChristmasEvent()) {
+            if(reservationDate.getDayOfMonth() == 1) {
+                return Optional.of(new Benefit("크리스마스 디데이 할인", 1000));
+            }
+
             int date = reservationDate.minusDays(getEventDate().getStartDate().getDayOfMonth()).getDayOfMonth();
             return Optional.of(new Benefit("크리스마스 디데이 할인", 1000 + (date * 100)));
         }
