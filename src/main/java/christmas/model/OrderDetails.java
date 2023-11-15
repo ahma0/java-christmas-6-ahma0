@@ -62,7 +62,10 @@ public class OrderDetails {
     }
 
     private void validateReservationOrderDetails(String orders) {
-        causeIllegalStateExceptionForOrderDetails(isBlankOrEmptyByOrderDetails(orders));
+        causeIllegalStateExceptionForOrderDetails(
+                isBlankOrEmptyByOrderDetails(orders)
+                        || !isContainHyphen(orders)
+        );
         validateOrderDetails(orders);
         causeIllegalArgumentExceptionForOrderDetails(
                 isDuplicated(orders)
@@ -75,6 +78,10 @@ public class OrderDetails {
         Arrays.stream(orders.replaceAll(" ", "").split(","))
                 .map(pair -> pair.split("-")[1])
                 .forEach(number -> causeIllegalArgumentExceptionForOrderDetails(!isDigit(number) || isZero(number)));
+    }
+
+    private boolean isContainHyphen(String orders) {
+        return orders.contains("-");
     }
 
     private boolean isBlankOrEmptyByOrderDetails(String orders) {
