@@ -170,4 +170,38 @@ public class BenefitListTest {
                         .contains(eventName)
         );
     }
+
+    @DisplayName("캘린더에 별 표시가 되어있는 날짜에 결제하면 특별할인이 적용된다.")
+    @Test
+    void createBenefitListBySpecialDiscount() {
+        //given
+        Reservation reservation = new Reservation("1");
+        reservation.setOrderDetails("초코케이크-1,아이스크림-1,제로콜라-1");
+
+        Reservation reservationWithSpecial = new Reservation("3");
+        reservationWithSpecial.setOrderDetails("티본스테이크-2,초코케이크-1,양송이수프-1,제로콜라-2");
+
+        String eventName = "특별 할인";
+
+        //when
+        BenefitList benefitList = new BenefitList(
+                new ChristmasEvent(reservation.getReservationDate()),
+                new DecemberEvent(reservation)
+        );
+
+        BenefitList benefitListWithSpecial = new BenefitList(
+                new ChristmasEvent(reservationWithSpecial.getReservationDate()),
+                new DecemberEvent(reservationWithSpecial)
+        );
+
+        //then
+        assertAll(
+                () -> assertThat(benefitList.getBenefits())
+                        .extracting("benefitName")
+                        .doesNotContain(eventName),
+                () -> assertThat(benefitListWithSpecial.getBenefits())
+                        .extracting("benefitName")
+                        .contains(eventName)
+        );
+    }
 }
