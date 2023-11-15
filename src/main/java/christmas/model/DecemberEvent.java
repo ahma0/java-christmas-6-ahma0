@@ -42,7 +42,7 @@ public class DecemberEvent extends Event {
 
     public Optional<Menu> getGiveaway() {
         if (didTotalPriceMeetCriteria()) {
-            Optional.of(GIVEAWAY);
+            return Optional.of(GIVEAWAY);
         }
 
         return Optional.empty();
