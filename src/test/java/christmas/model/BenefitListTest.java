@@ -102,4 +102,39 @@ public class BenefitListTest {
         );
 
     }
+
+    @DisplayName("평일에 디저트 메뉴를 계산하면 평일 할인이 적용된다.")
+    @Test
+    void createBenefitListByDesertDiscount() {
+        //given
+        Reservation reservation = new Reservation("4");
+        reservation.setOrderDetails("해산물파스타-1,제로콜라-1");
+
+        Reservation reservationWithDessert = new Reservation("4");
+        reservationWithDessert.setOrderDetails("티본스테이크-2,초코케이크-1,양송이수프-1,제로콜라-2");
+
+        String eventName = "평일 할인";
+
+        //when
+        BenefitList benefitList = new BenefitList(
+                new ChristmasEvent(reservation.getReservationDate()),
+                new DecemberEvent(reservation)
+        );
+
+        BenefitList benefitListWithDessert = new BenefitList(
+                new ChristmasEvent(reservationWithDessert.getReservationDate()),
+                new DecemberEvent(reservationWithDessert)
+        );
+
+        //then
+        assertAll(
+                () -> assertThat(benefitList.getBenefits())
+                        .extracting("benefitName")
+                        .doesNotContain(eventName),
+                () -> assertThat(benefitListWithDessert.getBenefits())
+                        .extracting("benefitName")
+                        .contains(eventName)
+        );
+
+    }
 }
