@@ -1,5 +1,7 @@
 package christmas.model;
 
+import christmas.model.value.EventBadge;
+
 import java.util.List;
 
 public class Discount {
@@ -41,6 +43,16 @@ public class Discount {
 
     public int getTotalBenefitAmount() {
         return benefitList.getTotalBenefitPrice();
+    }
+
+    public String getEventBadge() {
+        EventBadge eventBadge = EventBadge.getEventBadge(benefitList.getTotalBenefitPrice());
+
+        if (eventBadge != null) {
+            return eventBadge.getBadgeName();
+        }
+
+        return NOT_EXIST;
     }
 
     private BenefitList generateBenefitList(Reservation reservation) {

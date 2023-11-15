@@ -54,7 +54,6 @@ public class OutputView {
     }
 
     private String getPriceWithFormat(int price) {
-
         if (price == 0) {
             return "0원";
         }
@@ -69,14 +68,7 @@ public class OutputView {
 
     private void printEventBadge(Discount discount) {
         System.out.println("\n<12월 이벤트 배지>");
-        EventBadge eventBadge = EventBadge.getEventBadge(discount.getTotalBenefitAmount());
-
-        if (eventBadge != null) {
-            System.out.println(eventBadge.getBadgeName());
-            return;
-        }
-
-        System.out.println(NOT_EXIST);
+        System.out.println(discount.getEventBadge());
     }
 
 }
