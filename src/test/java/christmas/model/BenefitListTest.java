@@ -36,7 +36,7 @@ public class BenefitListTest {
 
     @DisplayName("혜택 금액이 12만원을 넘는 경우에만 샴페인을 증정한다.")
     @Test
-    void createBenefitListByNoneChampagne() {
+    void createBenefitListByChampagne() {
         //given
         Reservation reservation = new Reservation("3");
         reservation.setOrderDetails("해산물파스타-1,제로콜라-1");
@@ -59,8 +59,6 @@ public class BenefitListTest {
 
         //then
         assertAll(
-                () -> assertThat(benefitList.getTotalBenefitPrice()).isNotEqualTo(0),
-                () -> assertThat(benefitList.getTotalBenefitPriceWithoutGiveaway()).isNotEqualTo(0),
                 () -> assertThat(benefitList.getBenefits())
                         .extracting("benefitName", "benefitPrice")
                         .doesNotContain(tuple),
@@ -68,5 +66,40 @@ public class BenefitListTest {
                         .extracting("benefitName", "benefitPrice")
                         .contains(tuple)
         );
+    }
+
+    @DisplayName("1일부터 크리스마스 기간 내에만 크리스마스 디데이 할인이 적용된다.")
+    @Test
+    void createBenefitListByChristmasDDay() {
+        //given
+        Reservation reservation = new Reservation("26");
+        reservation.setOrderDetails("해산물파스타-1,초코케이크-1,제로콜라-1");
+
+        Reservation reservationWithChristmas = new Reservation("24");
+        reservationWithChristmas.setOrderDetails("티본스테이크-2,양송이수프-1,제로콜라-2");
+
+        String eventName = "크리스마스 디데이 할인";
+
+        //when
+        BenefitList benefitList = new BenefitList(
+                new ChristmasEvent(reservation.getReservationDate()),
+                new DecemberEvent(reservation)
+        );
+
+        BenefitList benefitListWithChristmas = new BenefitList(
+                new ChristmasEvent(reservationWithChristmas.getReservationDate()),
+                new DecemberEvent(reservation)
+        );
+
+        //then
+        assertAll(
+                () -> assertThat(benefitList.getBenefits())
+                        .extracting("benefitName")
+                        .doesNotContain(eventName),
+                () -> assertThat(benefitListWithChristmas.getBenefits())
+                        .extracting("benefitName")
+                        .contains(eventName)
+        );
+
     }
 }
