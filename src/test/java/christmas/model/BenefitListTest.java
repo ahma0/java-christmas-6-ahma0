@@ -135,6 +135,39 @@ public class BenefitListTest {
                         .extracting("benefitName")
                         .contains(eventName)
         );
+    }
 
+    @DisplayName("주말에 메인 메뉴를 계산하면 주말 할인이 적용된다.")
+    @Test
+    void createBenefitListByMainDishDiscount() {
+        //given
+        Reservation reservation = new Reservation("8");
+        reservation.setOrderDetails("초코케이크-1,아이스크림-1,제로콜라-1");
+
+        Reservation reservationWithMainDish = new Reservation("8");
+        reservationWithMainDish.setOrderDetails("티본스테이크-2,초코케이크-1,양송이수프-1,제로콜라-2");
+
+        String eventName = "주말 할인";
+
+        //when
+        BenefitList benefitList = new BenefitList(
+                new ChristmasEvent(reservation.getReservationDate()),
+                new DecemberEvent(reservation)
+        );
+
+        BenefitList benefitListWithMainDish = new BenefitList(
+                new ChristmasEvent(reservationWithMainDish.getReservationDate()),
+                new DecemberEvent(reservationWithMainDish)
+        );
+
+        //then
+        assertAll(
+                () -> assertThat(benefitList.getBenefits())
+                        .extracting("benefitName")
+                        .doesNotContain(eventName),
+                () -> assertThat(benefitListWithMainDish.getBenefits())
+                        .extracting("benefitName")
+                        .contains(eventName)
+        );
     }
 }
