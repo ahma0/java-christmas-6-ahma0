@@ -66,7 +66,6 @@ public class OrderDetails {
                 isBlankOrEmptyByOrderDetails(orders)
                         || !isContainHyphen(orders)
         );
-        validateSize(orders);
         validateOrderDetails(orders);
         causeIllegalArgumentExceptionForOrderDetails(
                 isDuplicated(orders)
@@ -77,14 +76,8 @@ public class OrderDetails {
 
     private void validateOrderDetails(String orders) {
         Arrays.stream(orders.replaceAll(" ", "").split(","))
-                .map(pair -> pair.split("-")[1])
-                .forEach(number -> causeIllegalArgumentExceptionForOrderDetails(!isDigit(number) || isZero(number)));
-    }
-
-    private void validateSize(String orders) {
-        Arrays.stream(orders.replaceAll(" ", "").split(","))
                 .map(pair -> pair.split("-"))
-                .forEach(pair -> causeIllegalArgumentExceptionForOrderDetails(!isSizeTwo(pair.length)));
+                .forEach(pair -> causeIllegalArgumentExceptionForOrderDetails(isSizeTwo(pair.length) && (!isDigit(pair[1]) || isZero(pair[1]))));
     }
 
     private boolean isSizeTwo(int length) {
